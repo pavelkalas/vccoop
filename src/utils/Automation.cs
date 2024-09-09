@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -29,10 +30,12 @@ namespace VcCoop.src.utils
         private const int LB_GETCOUNT = 0x018B;
         private const int LB_GETTEXTLEN = 0x018A;
         private const int LB_GETTEXT = 0x0189;
+        private const int LB_DELETESTRING = 0x0182;
 
         private const uint PROCESS_VM_OPERATION = 0x0008;
         private const uint PROCESS_VM_READ = 0x0010;
         private const uint PROCESS_QUERY_INFORMATION = 0x0400;
+        private const uint PROCESS_VM_WRITE = 0x0020;
 
         private const int WM_GETTEXT = 0x000D;
 
@@ -193,7 +196,7 @@ namespace VcCoop.src.utils
         /// <summary>
         /// Gets all data items on dialog window on specified element.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Array of strings readed from element (for example, listbox, listview, etc..)</returns>
         public string[] GetElementData(string element)
         {
             IntPtr listBoxHandle = FindWindowEx(windowHandle, IntPtr.Zero, element, null);
@@ -226,6 +229,31 @@ namespace VcCoop.src.utils
             }
 
             return items.ToArray();
+        }
+
+        /// <summary>
+        /// Clears or sets the empty element.
+        /// </summary>
+        /// <param name="element">Element name on GUI</param>
+        public void SetEmptyElement(string element)
+        {
+            IntPtr listBoxHandle = FindWindowEx(windowHandle, IntPtr.Zero, element, null);
+
+            GetWindowThreadProcessId(listBoxHandle, out uint targetProcessId);
+
+            IntPtr processHandle = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_WRITE, false, targetProcessId);
+
+            int count = SendMessage(listBoxHandle, LB_GETCOUNT, 0, null);
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                SendMessage(listBoxHandle, LB_DELETESTRING, i, null);
+            }
+
+            if (processHandle != IntPtr.Zero)
+            {
+                CloseHandle(processHandle);
+            }
         }
     }
 }
