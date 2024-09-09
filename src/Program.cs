@@ -11,15 +11,20 @@ namespace VcCoop
 {
     internal class Program
     {
+        private static readonly string vcguardPort = "5425";
+        
+        private static Automation automation;
+
+        private static EntityManager entityManager;
+
         static void Main(string[] args)
         {
-            // int processId = Process.GetProcesses().Where(p => p.MainWindowTitle.EndsWith("5425")).Select(p => p.Id).FirstOrDefault();
+            automation = new Automation(Process.GetProcesses().Where(proc => proc.MainWindowTitle.EndsWith(vcguardPort)).FirstOrDefault().Id, 1000);
+            entityManager = new EntityManager(1000, automation);
 
-            EntityManager em = new EntityManager(1000);
+            automation.StartTask();
+            entityManager.StartTask();
 
-            em.StartTask();
-
-            // to avoid closing application
             Console.ReadLine();
         }
     }
