@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace VcCoop.src.utils
 {
     internal class Automation
     {
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)] private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)] private static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)] private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, StringBuilder lParam);
@@ -46,12 +42,24 @@ namespace VcCoop.src.utils
         private static IntPtr windowHandle;
 
         /// <summary>
+        /// Added timer for queue task.
+        /// </summary>
+        private Timer timer;
+
+        /// <summary>
+        /// Delay before next queue data dequeue.
+        /// </summary>
+        private readonly int queueLoopDelay;
+
+        /// <summary>
         /// Queue of messages
         /// </summary>
         private static readonly Queue<string> messages = new Queue<string>();
 
-        public Automation(int pID)
+        public Automation(int pID, int queueLoopDelay)
         {
+            this.queueLoopDelay = queueLoopDelay;
+
             Process proc = Process.GetProcesses()
                 .Where(p => p.Id == pID)
                 .FirstOrDefault();
@@ -59,23 +67,41 @@ namespace VcCoop.src.utils
             if (proc.Id > 0 && !proc.HasExited)
             {
                 windowHandle = proc.MainWindowHandle;
-                new Thread(RunQueueWatcher).Start();
             }
         }
 
         /// <summary>
-        /// Dequeues the queue and send output into process
+        /// Starts the queue task.
         /// </summary>
-        private void RunQueueWatcher()
+        public void StartTask()
         {
-            while (true)
+            if (windowHandle != IntPtr.Zero)
             {
-                if (messages.Count > 0)
-                {
-                    SendInput(messages.Dequeue(), "Edit");
-                }
+                timer = new Timer(Task, null, 0, queueLoopDelay);
+            }
+        }
 
-                Thread.Sleep(20);
+        /// <summary>
+        /// Stops the queue task.
+        /// </summary>
+        public void StopTask()
+        {
+            if (timer != null)
+            {
+                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                timer.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Main task for dequeing items from queue and sends to editbox.
+        /// </summary>
+        /// <param name="obj"></param>
+        private void Task(Object obj)
+        {
+            if (messages.Count > 0)
+            {
+                SendInput(messages.Dequeue(), "Edit");
             }
         }
 
