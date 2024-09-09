@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET Framework
       uses: microsoft/setup-msbuild@v1
     - name: Restore dependencies
-      run: nuget restore YourSolution.sln
+      run: nuget restore VcCoop.sln
     - name: Build
       run: msbuild VcCoop.sln /p:Configuration=Release
     - name: Test
