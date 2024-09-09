@@ -58,7 +58,7 @@ namespace VcCoop.src.utils
 
         public Automation(int pID, int queueLoopDelay)
         {
-            this.queueLoopDelay = queueLoopDelay;
+            this.queueLoopDelay = (queueLoopDelay >= 20) ? queueLoopDelay : 100;
 
             Process proc = Process.GetProcesses()
                 .Where(p => p.Id == pID)
