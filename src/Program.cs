@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VcCoop.src.managers;
 using VcCoop.src.utils;
 
 namespace VcCoop
@@ -12,12 +13,14 @@ namespace VcCoop
     {
         static void Main(string[] args)
         {
-            int processId = Process.GetProcesses().Where(p => p.MainWindowTitle.EndsWith("5425")).Select(p => p.Id).FirstOrDefault();
+            // int processId = Process.GetProcesses().Where(p => p.MainWindowTitle.EndsWith("5425")).Select(p => p.Id).FirstOrDefault();
 
-            Automation auto = new Automation(processId);
+            EntityManager em = new EntityManager(1000);
 
-            auto.InsertToQueue("Hello");
+            em.StartTask();
 
+            // to avoid closing application
+            Console.ReadLine();
         }
     }
 }
