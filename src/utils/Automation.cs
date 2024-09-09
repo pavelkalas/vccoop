@@ -30,40 +30,20 @@ namespace VcCoop.src.utils
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)] private static extern int GetWindowTextLength(IntPtr hWnd);
 
-
-
         private const int LB_GETCOUNT = 0x018B;
         private const int LB_GETTEXTLEN = 0x018A;
         private const int LB_GETTEXT = 0x0189;
 
         private const uint PROCESS_VM_OPERATION = 0x0008;
         private const uint PROCESS_VM_READ = 0x0010;
-        private const uint PROCESS_VM_WRITE = 0x0020;
         private const uint PROCESS_QUERY_INFORMATION = 0x0400;
 
-        private const int WM_SETTEXT = 0x000C;
-        private const int LB_DELETESTRING = 0x0182;
-
         private const int WM_GETTEXT = 0x000D;
-
-
-
-
 
         /// <summary>
         /// Main GUI window handle.
         /// </summary>
         private static IntPtr windowHandle;
-
-        /// <summary>
-        /// Process ID
-        /// </summary>
-        private readonly int processId;
-
-        /// <summary>
-        /// Process instance
-        /// </summary>
-        private readonly Process processInstance;
 
         /// <summary>
         /// Queue of messages
@@ -78,10 +58,7 @@ namespace VcCoop.src.utils
 
             if (proc.Id > 0 && !proc.HasExited)
             {
-                processInstance = proc;
                 windowHandle = proc.MainWindowHandle;
-                processId = proc.Id;
-
                 new Thread(RunQueueWatcher).Start();
             }
         }
