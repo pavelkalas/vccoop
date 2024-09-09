@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Security;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 using VcCoop.src.models;
 using VcCoop.src.utils;
 
 namespace VcCoop.src.handlers
 {
-    internal class EventHandler
+    internal class EventsHandler
     {
         /// <summary>
         /// Automation instance
         /// </summary>
         private Automation automation;
 
-        public EventHandler(Automation automation)
+        public EventsHandler(Automation automation)
         {
             this.automation = automation;
         }
@@ -24,8 +20,8 @@ namespace VcCoop.src.handlers
         /// <summary>
         /// Runs every time specified in EntityManager class
         /// </summary>
-        /// <param name="entity">Entity instance</param>
-        public void OnEntityListUpdate(Entity entity)
+        /// <param name="entities">Entity instance</param>
+        public void OnEntityListUpdate(List<Entity> entities)
         {
         }
     }
