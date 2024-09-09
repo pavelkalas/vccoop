@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
+
+using VcCoop.src.handlers;
 using VcCoop.src.models;
 using VcCoop.src.utils;
 
@@ -28,10 +27,16 @@ namespace VcCoop.src.managers
         /// </summary>
         private Automation automation;
 
+        /// <summary>
+        /// Event handler instance
+        /// </summary>
+        private EventsHandler eventsHandler;
+
         public EntityManager(int checkInterval, Automation automation)
         {
             this.checkInterval = (checkInterval >= 1000) ? checkInterval : 1000;
             this.automation = automation;
+            this.eventsHandler = new EventsHandler(automation);
         }
 
         /// <summary>
@@ -121,17 +126,7 @@ namespace VcCoop.src.managers
                 })
                 .ToList();
 
-            // just for testing purposes!
-            // ...
-            Console.Clear();
-            // ...
-            foreach (Entity entity in entityList)
-            {
-                if (entity is Player || entity is Enemy)
-                {
-                    Console.WriteLine(entity);
-                }
-            }
+            eventsHandler.OnEntityListUpdate(entityList);
         }
     }
 }
