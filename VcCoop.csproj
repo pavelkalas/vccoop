@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="src\handlers\EventsHandler.cs" />
     <Compile Include="src\managers\EntityManager.cs" />
+    <Compile Include="src\managers\MissionManager.cs" />
     <Compile Include="src\models\Enemy.cs" />
     <Compile Include="src\models\Entity.cs" />
     <Compile Include="src\models\Player.cs" />
