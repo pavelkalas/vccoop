@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using VcCoop.src.managers;
 using VcCoop.src.models;
 using VcCoop.src.utils;
 
@@ -13,9 +14,15 @@ namespace VcCoop.src.handlers
         /// </summary>
         private Automation automation;
 
+        /// <summary>
+        /// Mission manager
+        /// </summary>
+        private MissionManager missionManager;
+
         public EventsHandler(Automation automation)
         {
             this.automation = automation;
+            this.missionManager = new MissionManager(automation);
         }
 
         /// <summary>
@@ -24,10 +31,7 @@ namespace VcCoop.src.handlers
         /// <param name="entities">Entity instance</param>
         public void OnEntityListUpdate(List<Entity> entities)
         {
-            // just for testing
-            Console.Clear();
-            Console.WriteLine("players count: " + entities.Where(ent => ent is Player).Count());
-            Console.WriteLine("enemies count: " + entities.Where(ent => ent is Enemy).Count());
+            missionManager.OnDataTick(entities);
         }
     }
 }
