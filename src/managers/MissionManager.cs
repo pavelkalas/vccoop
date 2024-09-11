@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Permissions;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using VcCoop.src.models;
 using VcCoop.src.utils;
 
 namespace VcCoop.src.managers
 {
+    /// <summary>
+    /// MISSION MANAGER
+    /// 
+    /// Class for managging missions status, informations, reporting etc..
+    /// </summary>
     internal class MissionManager
     {
         /// <summary>
@@ -79,6 +78,7 @@ namespace VcCoop.src.managers
             // do logic only when is some player on server
             if (player.Total > 0)
             {
+                // restarts the map if ANY player die but zero enemy was shot
                 if (player.Dead > 0 && enemy.Dead == 0)
                 {
                     automation.InsertToQueue("adminsay \"Starting the mission attempt...\"");
@@ -91,6 +91,8 @@ namespace VcCoop.src.managers
                         Thread.Sleep(1000);
                     }
                 }
+
+                // if ANY player die but some enemy was down
                 else if (player.Dead > 0 && enemy.Dead > 0)
                 {
                     // first attempt failed
@@ -133,8 +135,12 @@ namespace VcCoop.src.managers
 
                         // do mission stats record..
                         // ...
+
+                        // skip the attempt incrementing
+                        return;
                     }
 
+                    // increment attempt
                     currentMissionAttempt++;
                 }
             }
