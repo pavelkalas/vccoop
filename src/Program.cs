@@ -32,22 +32,57 @@ namespace VcCoop
 {
     internal class Program
     {
-        private static readonly string vcguardPort = "5425";
-
+        /// <summary>
+        /// Automation instance
+        /// </summary>
         private static Automation automation;
 
+        /// <summary>
+        /// Entity manager instance
+        /// </summary>
         private static EntityManager entityManager;
 
         static void Main(string[] args)
         {
-            Strings.Load();
+            // check for commandline arguments
+            if (args.Length > 0)
+            {
+                // get port argument, and if is argument an integer, try to bind as port
+                if (int.TryParse(args[0].Trim(), out int port))
+                {
+                    // get process of vcguard by PORT in TITLE of gui window
+                    Process process = Process.GetProcesses().Where(proc => proc.MainWindowTitle.EndsWith(port.ToString())).FirstOrDefault();
 
-            automation = new Automation(Process.GetProcesses().Where(proc => proc.MainWindowTitle.EndsWith(vcguardPort)).FirstOrDefault().Id, 1000);
-            entityManager = new EntityManager(1000, automation);
+                    // check if is process not null
+                    if (process != null)
+                    {
+                        // initialize instance of automation and entity manager
+                        automation = new Automation(process.Id, 1000);
+                        entityManager = new EntityManager(1000, automation);
 
-            automation.StartTask();
-            entityManager.StartTask();
+                        // load strings into memory
+                        Strings.Load();
 
+                        // start main task (message queue)
+                        automation.StartTask();
+
+                        // start entity listener task
+                        entityManager.StartTask();
+                    }
+                    else
+                    {
+                        // server not found at specified port, abort!
+                        Console.WriteLine("Cannot find server process! Try again!");
+                    }
+                }
+            }
+            else
+            {
+                // no console arguments given, abort!
+                Console.WriteLine("Missing startup arguments!\n\nUse:\n\n  VcCoop.EXE [server port]\n  example: VcCoop.EXE 5425");
+            }
+
+            // wait for key to avoid closing console.
             Console.ReadLine();
         }
     }
