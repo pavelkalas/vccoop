@@ -36,6 +36,8 @@ namespace VcCoop.src.managers
 {
     internal class EntityManager
     {
+        #region Attributes
+
         /// <summary>
         /// Interval to delay next check step.
         /// </summary>
@@ -55,6 +57,8 @@ namespace VcCoop.src.managers
         /// Controls when thread should start and when stop
         /// </summary>
         private bool taskRunning;
+
+        #endregion
 
         public EntityManager(int checkInterval, Automation automation)
         {

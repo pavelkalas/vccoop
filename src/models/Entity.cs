@@ -2,6 +2,8 @@
 {
     internal class Entity
     {
+        #region Attributes
+
         /// <summary>
         /// Name of entity
         /// </summary>
@@ -16,6 +18,8 @@
         /// Entity deaths
         /// </summary>
         public int Deaths { get; protected set; }
+
+        #endregion
 
         public Entity(string name, int kills, int deaths)
         {

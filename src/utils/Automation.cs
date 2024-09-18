@@ -1,5 +1,4 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -34,6 +33,8 @@ namespace VcCoop.src.utils
 {
     internal class Automation
     {
+        #region User32 imports
+
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)] private static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)] private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, StringBuilder lParam);
@@ -50,17 +51,33 @@ namespace VcCoop.src.utils
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)] private static extern int GetWindowTextLength(IntPtr hWnd);
 
+        #endregion
+
+        #region Listbox constants
+
         private const int LB_GETCOUNT = 0x018B;
         private const int LB_GETTEXTLEN = 0x018A;
         private const int LB_GETTEXT = 0x0189;
         private const int LB_DELETESTRING = 0x0182;
+
+        #endregion
+
+        #region Process constants
 
         private const uint PROCESS_VM_OPERATION = 0x0008;
         private const uint PROCESS_VM_READ = 0x0010;
         private const uint PROCESS_QUERY_INFORMATION = 0x0400;
         private const uint PROCESS_VM_WRITE = 0x0020;
 
+        #endregion
+
+        #region Window message constants
+
         private const int WM_GETTEXT = 0x000D;
+
+        #endregion
+
+        #region Attributes
 
         /// <summary>
         /// Main GUI window handle.
@@ -81,6 +98,8 @@ namespace VcCoop.src.utils
         /// Queue of messages
         /// </summary>
         private static readonly Queue<string> messages = new Queue<string>();
+
+        #endregion
 
         public Automation(int pID, int queueLoopDelay)
         {

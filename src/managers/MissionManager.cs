@@ -37,6 +37,8 @@ namespace VcCoop.src.managers
     /// </summary>
     internal class MissionManager
     {
+        #region Structures
+
         /// <summary>
         /// Enemy info structure
         /// </summary>
@@ -56,6 +58,10 @@ namespace VcCoop.src.managers
             public int Dead;
             public int Total;
         }
+
+        #endregion
+
+        #region Attributes
 
         /// <summary>
         /// Player structure instance
@@ -82,6 +88,8 @@ namespace VcCoop.src.managers
         /// </summary>
         private int currentMissionAttempt = 1;
 
+        #endregion
+
         public MissionManager(Automation automation)
         {
             this.automation = automation;
@@ -89,6 +97,8 @@ namespace VcCoop.src.managers
 
         public void OnDataTick(List<Entity> entities)
         {
+            #region Querying the data
+
             // collect informations about players
             player.Total = entities.Where(e => e is models.Player).Count();
             player.Live = entities.Where(e => e is models.Player && e.Deaths == 0).Count();
@@ -98,6 +108,10 @@ namespace VcCoop.src.managers
             enemy.Total = entities.Where(e => e is models.Enemy).Count();
             enemy.Live = entities.Where(e => e is models.Enemy && e.Deaths == 0).Count();
             enemy.Dead = entities.Where(e => e is models.Enemy && e.Deaths > 0).Count();
+
+            #endregion
+
+            #region Mission Logics
 
             // do logic only when is some player on server
             if (player.Total > 0)
@@ -168,6 +182,8 @@ namespace VcCoop.src.managers
                     currentMissionAttempt++;
                 }
             }
+
+            #endregion
         }
     }
 }
