@@ -70,7 +70,7 @@ namespace VcCoop.src.managers
         /// <summary>
         /// Automation instance
         /// </summary>
-        private Automation automation;
+        private readonly Automation automation;
 
         /// <summary>
         /// Maximum mission attempts

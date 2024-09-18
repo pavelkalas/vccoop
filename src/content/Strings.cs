@@ -31,7 +31,7 @@ namespace VcCoop.src.content
         /// <summary>
         /// List of the strings
         /// </summary>
-        private static Dictionary<int, string> stringList = new Dictionary<int, string>();
+        private static readonly Dictionary<int, string> stringList = new Dictionary<int, string>();
 
         /// <summary>
         /// Load the strings into dictionary list

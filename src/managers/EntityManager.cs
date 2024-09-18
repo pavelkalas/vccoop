@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -45,12 +44,12 @@ namespace VcCoop.src.managers
         /// <summary>
         /// Automation instance
         /// </summary>
-        private Automation automation;
+        private readonly Automation automation;
 
         /// <summary>
         /// Event handler instance
         /// </summary>
-        private EventsHandler eventsHandler;
+        private readonly EventsHandler eventsHandler;
 
         /// <summary>
         /// Controls when thread should start and when stop

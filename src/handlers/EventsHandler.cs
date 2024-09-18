@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using VcCoop.src.managers;
 using VcCoop.src.models;
 using VcCoop.src.utils;
@@ -33,18 +31,12 @@ namespace VcCoop.src.handlers
     internal class EventsHandler
     {
         /// <summary>
-        /// Automation instance
-        /// </summary>
-        private Automation automation;
-
-        /// <summary>
         /// Mission manager
         /// </summary>
-        private MissionManager missionManager;
+        private readonly MissionManager missionManager;
 
         public EventsHandler(Automation automation)
         {
-            this.automation = automation;
             this.missionManager = new MissionManager(automation);
         }
 
