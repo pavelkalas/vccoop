@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using VcCoop.src.content;
 using VcCoop.src.models;
 using VcCoop.src.utils;
 
@@ -104,7 +105,7 @@ namespace VcCoop.src.managers
                 // restarts the map if ANY player die but zero enemy was shot
                 if (player.Dead > 0 && enemy.Dead == 0)
                 {
-                    automation.InsertToQueue("adminsay \"Starting the mission attempt...\"");
+                    automation.InsertToQueue("adminsay \"" + Strings.Get(3) + "\"");
 
                     Thread.Sleep(2500);
 
@@ -121,19 +122,19 @@ namespace VcCoop.src.managers
                     // first attempt failed
                     if (currentMissionAttempt == 1)
                     {
-                        automation.InsertToQueue("adminsay \"Mission failed! Try again..\"");
+                        automation.InsertToQueue("adminsay \"" + Strings.Get(0) + "\"");
                     }
 
                     // second attempt failed
                     else if (currentMissionAttempt == maxAttempts - 1)
                     {
-                        automation.InsertToQueue("adminsay \"Mission failed! This is your last cahnce..\"");
+                        automation.InsertToQueue("adminsay \"" + Strings.Get(1) + "\"");
                     }
 
                     // third attempt failed (last)
                     else if (currentMissionAttempt == maxAttempts)
                     {
-                        automation.InsertToQueue("adminsay \"Last attempt failed, switching to nextmap\"");
+                        automation.InsertToQueue("adminsay \"" + Strings.Get(2) + "\"");
                     }
 
                     if (currentMissionAttempt != maxAttempts)
@@ -152,7 +153,7 @@ namespace VcCoop.src.managers
 
                         // switch the map
                         automation.InsertToQueue("nextmap");
-                        
+
                         // resets the attempt count to 1
                         currentMissionAttempt = 1;
 

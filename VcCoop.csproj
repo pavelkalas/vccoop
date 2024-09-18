@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\content\Strings.cs" />
     <Compile Include="src\handlers\EventsHandler.cs" />
     <Compile Include="src\managers\EntityManager.cs" />
     <Compile Include="src\managers\MissionManager.cs" />
