@@ -44,6 +44,16 @@ namespace VcCoop
 
         static void Main(string[] args)
         {
+            /*
+             * TO START THIS PROGRAM, YOU NEED TO CREATE A BATCH FILE WITH FOLLOWING CONTENT
+             * 
+             * cd %~dp0%
+             * VcCoop.EXE [port]  (replace [port] with a port number of your vcguard server)
+             * 
+             * !!! MAKE SURE YOU RUN THE BATCH FILE AS ADMINISTRATOR !!!
+             * 
+             */
+
             // check for commandline arguments
             if (args.Length > 0)
             {
@@ -51,7 +61,7 @@ namespace VcCoop
                 if (int.TryParse(args[0].Trim(), out int port))
                 {
                     // get process of vcguard by PORT in TITLE of gui window
-                    Process process = Process.GetProcesses().Where(proc => proc.MainWindowTitle.EndsWith(port.ToString())).FirstOrDefault();
+                    Process process = Process.GetProcesses().Where(proc => proc.MainWindowTitle.EndsWith(port.ToString()) && proc.ProcessName == "vcded").FirstOrDefault();
 
                     // check if is process not null
                     if (process != null)
@@ -68,18 +78,25 @@ namespace VcCoop
 
                         // start entity listener task
                         entityManager.StartTask();
+
+                        Console.WriteLine("INFO : RUNNING OK!");
                     }
                     else
                     {
                         // server not found at specified port, abort!
-                        Console.WriteLine("Cannot find server process! Try again!");
+                        Console.WriteLine("\nERROR : Cannot find server process! Try again!\n\nPress any key to continue...");
                     }
+                }
+                else
+                {
+                    // if the port is not a valid integer
+                    Console.WriteLine("\nERROR : Port number must be an integer!\n\nPress any key to continue...");
                 }
             }
             else
             {
                 // no console arguments given, abort!
-                Console.WriteLine("Missing startup arguments!\n\nUse:\n\n  VcCoop.EXE [server port]\n  example: VcCoop.EXE 5425");
+                Console.WriteLine("\nERROR : Missing startup arguments!\n\nUse:\n\n  VcCoop.EXE [server port]\n\n  example: VcCoop.EXE 5425\n\nPress any key to continue...");
             }
 
             // wait for key to avoid closing console.
